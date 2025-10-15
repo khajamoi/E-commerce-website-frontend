@@ -25,7 +25,9 @@ import { useAuth, AuthProvider } from "./context/AuthContext";
 import CheckoutAddress from "./pages/CheckoutAddress";
 import Payment from "./pages/Payment";
 import UserPayment from "./pages/UserPayment";
-import Password from "./pages/password";
+// import Password from "./pages/password";
+import Password from "./pages/Password";
+
 
 
 function PrivateRoute({ children }) {
