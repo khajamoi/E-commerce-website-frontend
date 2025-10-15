@@ -1,8 +1,15 @@
 // src/api/api.js
 import axios from "axios";
 
+// const api = axios.create({
+//   baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080/api",
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+// });
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080/api",
+  baseURL: import.meta.env.VITE_API_URL || "https://e-commerce-website-backend-production-abe0.up.railway.app/api",
   headers: {
     "Content-Type": "application/json",
   },
