@@ -9,7 +9,7 @@ import axios from "axios";
 // });
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "https://e-commerce-website-backend-production-abe0.up.railway.app/api",
+  baseURL: import.meta.env.VITE_API_URL || "https://khajamoinuddin-ecommerce-website.up.railway.app/api",
   headers: {
     "Content-Type": "application/json",
   },
