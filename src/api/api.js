@@ -9,11 +9,10 @@ import axios from "axios";
 // });
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL, // DO NOT add /api if backend does not use /api prefix
-  headers: {
-    "Content-Type": "application/json",
-  },
+  baseURL: import.meta.env.VITE_API_URL + "/api", // append /api
+  headers: { "Content-Type": "application/json" },
 });
+
 
 api.interceptors.request.use(cfg => {
   const token = localStorage.getItem("fe_token");
