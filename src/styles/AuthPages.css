@@ -1,0 +1,132 @@
+/* src/styles/AuthPages.css */
+
+/* Full-page background with gradient */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  padding: 20px;
+}
+
+/* Auth Box */
+.auth-box {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 30px 40px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+.auth-title {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.auth-subtitle {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+/* Form Styling */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-form label {
+  text-align: left;
+  font-size: 0.9rem;
+  color: #444;
+  font-weight: 500;
+}
+
+.auth-form input,
+.auth-form select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.auth-form input:focus,
+.auth-form select:focus {
+  border-color: #2575fc;
+}
+
+/* Buttons */
+.auth-button {
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  color: white;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.auth-button:hover {
+  background: linear-gradient(90deg, #5b0eb1, #1e62e3);
+}
+
+.signup-btn {
+  background: linear-gradient(90deg, #ffcc00, #ff9900);
+  color: #000;
+}
+
+.signup-btn:hover {
+  background: linear-gradient(90deg, #ffdb4d, #ffb84d);
+}
+
+.admin-btn {
+  background: linear-gradient(90deg, #e91e63, #ff5722);
+}
+
+.admin-btn:hover {
+  background: linear-gradient(90deg, #d81b60, #f44336);
+}
+
+/* Auth Links */
+.auth-links {
+  margin-top: 16px;
+  font-size: 0.85rem;
+}
+
+.auth-links a {
+  color: #2575fc;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.auth-links a:hover {
+  text-decoration: underline;
+}
+
+/* Role Dropdown */
+.role-dropdown {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* Admin-specific button style */
+.admin-btn {
+  background: linear-gradient(90deg, #ff4d4d, #e91e63);
+  color: white;
+}
+
+.admin-btn:hover {
+  background: linear-gradient(90deg, #ff3333, #d81b60);
+}

@@ -1,0 +1,286 @@
+/* ===============================
+   NAVBAR BASE
+================================= */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px;
+  background: linear-gradient(90deg, #ff6a00, #ee0979);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  transition: background 0.3s ease;
+  backdrop-filter: blur(6px);
+}
+
+.nav:hover {
+  background: linear-gradient(90deg, #ff8c42, #ff2e63);
+}
+
+/* ===============================
+   LEFT SECTION
+================================= */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  gap: 10px;
+}
+
+.brand-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.brand-text {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+/* ===============================
+   HAMBURGER ICON (MOBILE)
+================================= */
+.hamburger {
+  display: none;
+  cursor: pointer;
+}
+
+/* ===============================
+   RIGHT SECTION
+================================= */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-user {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* ===============================
+   CART ICON
+================================= */
+.cart-icon {
+  position: relative;
+}
+
+.cart-link {
+  color: #fff;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.cart-link .icon {
+  width: 28px;
+  height: 28px;
+}
+
+.cart-count {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background: #ffcc00;
+  color: #000;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ===============================
+   ADMIN LINK
+================================= */
+.admin-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.admin-link:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ===============================
+   AUTH BUTTONS
+================================= */
+.auth-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.login-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.login-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.signup-btn {
+  background: #ffcc00;
+  color: #000;
+}
+
+.signup-btn:hover {
+  background: #ffdb4d;
+}
+
+/* ===============================
+   LOGOUT BUTTON
+================================= */
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ff4d4d;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: #e63939;
+}
+
+/* ===============================
+   SEARCH BAR
+================================= */
+.search-bar-right {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 40px;
+  overflow: hidden;
+  width: 320px;
+  max-width: 100%;
+  margin-right: 16px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+.search-input-right {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 12px 18px;
+  font-size: 1rem;
+  color: #333;
+}
+
+.search-btn-right {
+  background: linear-gradient(90deg, #ff6a00, #ee0979);
+  border: none;
+  padding: 12px 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-btn-right:hover {
+  background: linear-gradient(90deg, #ff8c42, #ff2e63);
+}
+
+.search-icon-right {
+  color: #fff;
+  width: 22px;
+  height: 22px;
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
+================================= */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  /* Hide nav-right by default on mobile */
+  .nav-right {
+    position: absolute;
+    top: 70px;
+    right: 0;
+    background: linear-gradient(90deg, #ff6a00, #ee0979);
+    flex-direction: column;
+    width: 100%;
+    padding: 20px 0;
+    transform: translateY(-150%);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* When menu is open */
+  .nav-right.open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .search-bar-right {
+    width: 90%;
+  }
+
+  .cart-link .icon {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+
+
+/* Password Generator Button */
+.password-btn {
+  background-color: #34D399;
+  color: black;
+  padding: 8px 12px;
+  margin-left: 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  transition: 0.3s ease-in-out;
+}
+
+.password-btn:hover {
+  background-color: #2bc48a;
+  color: white;
+}
+
+.password-btn .icon {
+  margin-right: 6px;
+}
