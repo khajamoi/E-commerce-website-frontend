@@ -96,7 +96,7 @@ export default function Navbar() {
         </motion.div>
 
         {/* ---------- Password Generator Link ---------- */}
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+        {/* <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
           <Link
             to="/password"
             className="auth-btn password-btn"
@@ -105,7 +105,7 @@ export default function Navbar() {
             <KeyRound className="icon" />
             Password Generator
           </Link>
-        </motion.div>
+        </motion.div> */}
 
         {/* ---------- Conditional Rendering for Auth ---------- */}
         {user ? (

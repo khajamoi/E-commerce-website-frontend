@@ -1,19 +1,31 @@
+// src/pages/Checkout.jsx
 import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import api from "../api/api";
-import { useNavigate } from "react-router-dom";
 import { Container, Button, Table } from "react-bootstrap";
 import { Typography, Paper } from "@mui/material";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 export default function Checkout() {
-  const { items, total } = useCart();
-  const nav = useNavigate();
+  const { removeItem } = useCart();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { items = [], total = 0 } = location.state || {};
 
   const handleProceedToPayment = () => {
-  nav("/checkout/UserPayment", { state: { items, total } }); // ✅ FIXED
-};
+    // Remove only selected items from cart after successful payment
+    navigate("/checkout/UserPayment", { state: { items, total } });
+  };
 
+  if (!items || items.length === 0)
+    return (
+      <Container className="py-5 text-center">
+        <Typography variant="h5">No items selected for checkout.</Typography>
+        <Button onClick={() => navigate("/cart")} variant="success" className="mt-3">
+          Go back to Cart
+        </Button>
+      </Container>
+    );
 
   return (
     <Container className="py-5">
@@ -22,7 +34,6 @@ export default function Checkout() {
           Checkout Summary
         </Typography>
 
-        {/* Product Summary Table */}
         <Table striped bordered hover responsive className="mt-3">
           <thead>
             <tr>
@@ -44,17 +55,10 @@ export default function Checkout() {
           </tbody>
         </Table>
 
-        <Typography
-          variant="h5"
-          color="success.main"
-          fontWeight="bold"
-          gutterBottom
-          className="mt-3"
-        >
+        <Typography variant="h5" color="success.main" fontWeight="bold" className="mt-3">
           Total: ₹{total.toFixed(2)}
         </Typography>
 
-        {/* Proceed to Payment Button */}
         <Button
           variant="success"
           size="lg"
@@ -67,68 +71,3 @@ export default function Checkout() {
     </Container>
   );
 }
-
-
-
-
-// import React from "react";
-// import { useCart } from "../context/CartContext";
-// import api from "../api/api";
-// import { useNavigate } from "react-router-dom";
-// import { Container, Button } from "react-bootstrap";
-// import { Typography, Paper, Alert } from "@mui/material";
-
-// export default function CheckoutPayPal() {
-//   const { items, total, clearCart } = useCart();
-//   const nav = useNavigate();
-//   const [error, setError] = React.useState(null);
-//   const [loading, setLoading] = React.useState(false);
-
-//   async function handlePayWithPayPal() {
-//     try {
-//       setLoading(true);
-//       setError(null);
-
-//       const res = await api.post("/paypal/create", { total });
-//       const { url } = res.data;
-
-//       window.location.href = url; // Redirect to PayPal approval page
-//     } catch (err) {
-//       console.error(err);
-//       setError("Failed to start PayPal payment.");
-//     } finally {
-//       setLoading(false);
-//     }
-//   }
-
-//   return (
-//     <Container className="py-5">
-//       <Paper sx={{ p: 4, borderRadius: "16px", maxWidth: 500, mx: "auto" }}>
-//         <Typography variant="h4" fontWeight="bold" gutterBottom>
-//           Pay with PayPal
-//         </Typography>
-//         {error && <Alert severity="error">{error}</Alert>}
-//         <Typography variant="body1" gutterBottom>
-//           Items: {items.length}
-//         </Typography>
-//         <Typography
-//           variant="h5"
-//           color="success.main"
-//           fontWeight="bold"
-//           gutterBottom
-//         >
-//           Total: ${total.toFixed(2)}
-//         </Typography>
-//         <Button
-//           variant="warning"
-//           size="lg"
-//           className="w-100 d-flex align-items-center justify-content-center gap-2"
-//           onClick={handlePayWithPayPal}
-//           disabled={loading}
-//         >
-//           {loading ? "Redirecting..." : "Pay with PayPal"}
-//         </Button>
-//       </Paper>
-//     </Container>
-//   );
-// }

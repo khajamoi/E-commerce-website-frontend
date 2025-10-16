@@ -28,8 +28,27 @@ import UserPayment from "./pages/UserPayment";
 // import Password from "./pages/password";
 import Password from "./pages/Password";
 
+function AppWrapper() {
+  const { user } = useAuth();
+  const userId = user?.id || null;
 
-
+  return (
+    <CartProvider userId={userId}>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/products" element={<ProductList />} />
+          <Route path="/products/:id" element={<ProductDetail />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/checkout/UserPayment" element={<UserPayment />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
+      </Layout>
+    </CartProvider>
+  );
+}
 function PrivateRoute({ children }) {
   const { user } = useAuth();
   return user ? children : <Navigate to="/login" />;

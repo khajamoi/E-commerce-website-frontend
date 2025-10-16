@@ -1,22 +1,39 @@
 // src/pages/Cart.jsx
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import CartItem from "../components/CartItem";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import { Typography, Paper } from "@mui/material";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 
 export default function Cart() {
-  const { items, updateQty, removeItem, total } = useCart();
+  const { items, updateQty, removeItem } = useCart();
   const navigate = useNavigate();
+  const [selectedItems, setSelectedItems] = useState(items.map((i) => i.product.id));
 
-  if (items.length === 0)
+  const toggleSelect = (productId) => {
+    setSelectedItems((prev) =>
+      prev.includes(productId)
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId]
+    );
+  };
+
+  const selectedTotal = items
+    .filter((i) => selectedItems.includes(i.product.id))
+    .reduce((sum, i) => sum + i.product.price * i.qty, 0);
+
+  const handleCheckout = () => {
+    const checkoutItems = items.filter((i) => selectedItems.includes(i.product.id));
+    if (!checkoutItems.length) return alert("Select at least one item to checkout.");
+    navigate("/checkout", { state: { items: checkoutItems, total: selectedTotal } });
+  };
+
+  if (!items.length)
     return (
       <Container className="py-5 text-center">
-        <Typography variant="h4" gutterBottom>
-          🛒 Your cart is empty
-        </Typography>
+        <Typography variant="h4">🛒 Your cart is empty</Typography>
         <Button as={Link} to="/" variant="success">
           Shop Fruits
         </Button>
@@ -25,37 +42,38 @@ export default function Cart() {
 
   return (
     <Container className="py-5">
-      <Typography variant="h4" gutterBottom fontWeight="bold">
+      <Typography variant="h4" fontWeight="bold" className="mb-4">
         Your Cart
       </Typography>
-
-      <Row>
-        <Col md={8}>
+      <Row className="gy-4">
+        <Col xs={12} md={8}>
           {items.map((it) => (
-            <CartItem
-              key={it.product.id}
-              item={it}
-              onUpdate={updateQty}
-              onRemove={removeItem}
-            />
+            <Paper key={it.product.id} sx={{ p: 2, mb: 2, borderRadius: "16px", boxShadow: 3 }}>
+              <Form.Check
+                type="checkbox"
+                id={`select-${it.product.id}`}
+                label="Select for checkout"
+                checked={selectedItems.includes(it.product.id)}
+                onChange={() => toggleSelect(it.product.id)}
+                className="mb-2"
+              />
+              <CartItem item={it} onUpdate={updateQty} onRemove={removeItem} />
+            </Paper>
           ))}
         </Col>
-
-        <Col md={4}>
-          <Paper sx={{ p: 3, borderRadius: "16px", boxShadow: 3 }}>
+        <Col xs={12} md={4}>
+          <Paper sx={{ p: 3, borderRadius: "16px", boxShadow: 3, position: "sticky", top: 100 }}>
             <Typography variant="h6" fontWeight="bold" gutterBottom>
               Order Summary
             </Typography>
-            <Typography variant="body1" className="mb-2">
-              Items: {items.length}
-            </Typography>
-            <Typography variant="h5" color="success.main" fontWeight="bold">
-              Total: ₹{total.toFixed(2)}
+            <Typography>Items selected: {selectedItems.length}</Typography>
+            <Typography variant="h5" color="success.main" fontWeight="bold" className="mb-3">
+              Total: ₹{selectedTotal.toFixed(2)}
             </Typography>
             <Button
               variant="success"
-              className="mt-3 w-100 d-flex align-items-center justify-content-center gap-2"
-              onClick={() => navigate("/checkout/address")}
+              className="w-100 d-flex align-items-center justify-content-center gap-2"
+              onClick={handleCheckout}
             >
               <ShoppingCartCheckoutIcon /> Proceed to Checkout
             </Button>

@@ -1,9 +1,21 @@
+// src/components/Footer.jsx
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { Facebook, Instagram, Twitter, Linkedin, Phone, Mail, MapPin } from "lucide-react";
 import { TextField, Button, Typography } from "@mui/material";
 
 export default function Footer() {
+  // Social media links
+  const socialLinks = {
+    facebook: "https://www.facebook.com/yourpage",
+    instagram: "https://www.instagram.com/yourprofile",
+    twitter: "https://twitter.com/yourprofile",
+    linkedin: "https://www.linkedin.com/in/yourprofile",
+  };
+
+  // Custom color for FruitStore in copyright
+  const fruitStoreColor = "#ff5722"; // orange/red color
+
   return (
     <footer className="bg-dark text-light mt-auto">
       <Container className="py-5">
@@ -17,7 +29,7 @@ export default function Footer() {
                 className="rounded-circle border border-success me-2"
                 style={{ width: 48, height: 48 }}
               />
-              <Typography variant="h6" className="fw-bold text-white">
+              <Typography variant="h6" className="fw-bold" sx={{ color: "#4caf50" }}>
                 FruitStore 🍎
               </Typography>
             </div>
@@ -26,16 +38,42 @@ export default function Footer() {
               doorstep. Shop fresh, live healthy!
             </Typography>
             <div className="d-flex gap-3 mt-3">
-              {[Facebook, Instagram, Twitter, Linkedin].map((Icon, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="p-2 rounded-circle bg-secondary text-white"
-                  style={{ display: "inline-flex" }}
-                >
-                  <Icon size={18} />
-                </a>
-              ))}
+              <a
+                href={socialLinks.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-circle bg-secondary text-white"
+                style={{ display: "inline-flex" }}
+              >
+                <Facebook size={18} />
+              </a>
+              <a
+                href={socialLinks.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-circle bg-secondary text-white"
+                style={{ display: "inline-flex" }}
+              >
+                <Instagram size={18} />
+              </a>
+              <a
+                href={socialLinks.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-circle bg-secondary text-white"
+                style={{ display: "inline-flex" }}
+              >
+                <Twitter size={18} />
+              </a>
+              <a
+                href={socialLinks.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-circle bg-secondary text-white"
+                style={{ display: "inline-flex" }}
+              >
+                <Linkedin size={18} />
+              </a>
             </div>
           </Col>
 
@@ -47,7 +85,10 @@ export default function Footer() {
             <ul className="list-unstyled">
               {["Home", "Shop", "Cart", "Checkout", "Contact Us"].map((name, i) => (
                 <li key={i} className="mb-2">
-                  <a href={`/${name.toLowerCase().replace(/\s/g, "")}`} className="text-light text-decoration-none">
+                  <a
+                    href={`/${name.toLowerCase().replace(/\s/g, "")}`}
+                    className="text-light text-decoration-none"
+                  >
                     {name}
                   </a>
                 </li>
@@ -105,10 +146,14 @@ export default function Footer() {
         </Row>
       </Container>
 
+      {/* Copyright */}
       <div className="bg-secondary text-center py-3">
         <Typography variant="body2" color="white">
-          © {new Date().getFullYear()} <span className="fw-bold text-success">FruitStore</span>. All
-          rights reserved.
+          © {new Date().getFullYear()}{" "}
+          <span className="fw-bold" style={{ color: fruitStoreColor }}>
+            FruitStore
+          </span>
+          . All rights reserved.
         </Typography>
       </div>
     </footer>
