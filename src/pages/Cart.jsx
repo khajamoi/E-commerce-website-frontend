@@ -1,4 +1,3 @@
-// src/pages/Cart.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
@@ -20,14 +19,17 @@ export default function Cart() {
     );
   };
 
-  const selectedTotal = items
-    .filter((i) => selectedItems.includes(i.product.id))
-    .reduce((sum, i) => sum + i.product.price * i.qty, 0);
+  const selectedProducts = items.filter((i) => selectedItems.includes(i.product.id));
+  const selectedTotal = selectedProducts.reduce((sum, i) => sum + i.product.price * i.qty, 0);
 
   const handleCheckout = () => {
-    const checkoutItems = items.filter((i) => selectedItems.includes(i.product.id));
-    if (!checkoutItems.length) return alert("Select at least one item to checkout.");
-    navigate("/checkout", { state: { items: checkoutItems, total: selectedTotal } });
+    if (!selectedProducts.length) {
+      alert("⚠️ Please select at least one item to proceed.");
+      return;
+    }
+    navigate("/checkout/address", {
+      state: { items: selectedProducts, total: selectedTotal },
+    });
   };
 
   if (!items.length)
@@ -48,7 +50,10 @@ export default function Cart() {
       <Row className="gy-4">
         <Col xs={12} md={8}>
           {items.map((it) => (
-            <Paper key={it.product.id} sx={{ p: 2, mb: 2, borderRadius: "16px", boxShadow: 3 }}>
+            <Paper
+              key={it.product.id}
+              sx={{ p: 2, mb: 2, borderRadius: "16px", boxShadow: 3 }}
+            >
               <Form.Check
                 type="checkbox"
                 id={`select-${it.product.id}`}
@@ -61,13 +66,27 @@ export default function Cart() {
             </Paper>
           ))}
         </Col>
+
         <Col xs={12} md={4}>
-          <Paper sx={{ p: 3, borderRadius: "16px", boxShadow: 3, position: "sticky", top: 100 }}>
+          <Paper
+            sx={{
+              p: 3,
+              borderRadius: "16px",
+              boxShadow: 3,
+              position: "sticky",
+              top: 100,
+            }}
+          >
             <Typography variant="h6" fontWeight="bold" gutterBottom>
               Order Summary
             </Typography>
-            <Typography>Items selected: {selectedItems.length}</Typography>
-            <Typography variant="h5" color="success.main" fontWeight="bold" className="mb-3">
+            <Typography>Items selected: {selectedProducts.length}</Typography>
+            <Typography
+              variant="h5"
+              color="success.main"
+              fontWeight="bold"
+              className="mb-3"
+            >
               Total: ₹{selectedTotal.toFixed(2)}
             </Typography>
             <Button

@@ -1,4 +1,3 @@
-// src/pages/CheckoutAddress.jsx
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import api from "../api/api";
@@ -18,7 +17,7 @@ import {
   RadioGroup,
   Tooltip,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
 import WorkIcon from "@mui/icons-material/Work";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -26,6 +25,10 @@ import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 
 export default function CheckoutAddress() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { items = [], total = 0 } = location.state || {};
+
   const [addresses, setAddresses] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
 
@@ -41,8 +44,6 @@ export default function CheckoutAddress() {
     isDefault: false,
   });
 
-  const navigate = useNavigate();
-
   /** Load saved addresses */
   useEffect(() => {
     if (!user) return;
@@ -50,7 +51,7 @@ export default function CheckoutAddress() {
       .get(`/addresses/user/${user.id}`)
       .then((res) => {
         setAddresses(res.data);
-        const defaultAddr = res.data.find((a) => a.isDefault === true);
+        const defaultAddr = res.data.find((a) => a.isDefault);
         if (defaultAddr) setSelectedId(defaultAddr.id);
       })
       .catch(() => setAddresses([]));
@@ -63,7 +64,7 @@ export default function CheckoutAddress() {
       const res = await api.post(`/addresses/user/${user.id}/add`, newAddress);
       setAddresses((prev) => [...prev, res.data]);
       if (res.data.isDefault) setSelectedId(res.data.id);
-
+      alert("✅ Address added successfully!");
       setNewAddress({
         street: "",
         city: "",
@@ -75,8 +76,6 @@ export default function CheckoutAddress() {
         addressType: "HOME",
         isDefault: false,
       });
-
-      alert("✅ Address added successfully!");
     } catch (err) {
       console.error(err);
       alert("❌ Failed to add address");
@@ -89,38 +88,39 @@ export default function CheckoutAddress() {
       alert("⚠️ Please select an address to proceed");
       return;
     }
-    navigate("/checkout/payment", { state: { addressId: selectedId } });
+    navigate("/Checkout", {
+      state: { addressId: selectedId, items, total },
+    });
   }
 
   return (
-    <Container className="py-5">
-      {/* Page Title */}
+    <Container fluid className="py-5" style={{ background: "#f5f5f5", minHeight: "100vh" }}>
+      {/* Title */}
       <Typography
         variant="h4"
         fontWeight="bold"
+        align="center"
         gutterBottom
         sx={{
-          textAlign: "center",
-          mb: 4,
           color: "#2E7D32",
           textShadow: "0px 2px 4px rgba(0,0,0,0.2)",
+          mb: 4,
         }}
       >
         🏡 Delivery Address
       </Typography>
 
-      <Row>
-        {/* LEFT COLUMN */}
-        <Col md={8}>
+      <Row className="gy-4">
+        {/* LEFT SECTION */}
+        <Col xs={12} lg={8}>
           {/* SAVED ADDRESSES */}
           <Paper
             sx={{
-              p: 3,
-              borderRadius: "20px",
-              boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
+              p: { xs: 2, md: 3 },
               mb: 4,
-              background: "#f9f9f9",
-              border: "1px solid #e0e0e0",
+              borderRadius: "16px",
+              boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+              background: "#fff",
             }}
           >
             <Typography variant="h6" fontWeight="bold" gutterBottom>
@@ -142,18 +142,15 @@ export default function CheckoutAddress() {
                     sx={{
                       p: 2,
                       mb: 2,
-                      borderRadius: "14px",
+                      borderRadius: "12px",
                       border:
                         selectedId === addr.id
                           ? "2px solid #4caf50"
                           : "1px solid #ddd",
-                      backgroundColor: selectedId === addr.id ? "#E8F5E9" : "#fff",
+                      backgroundColor:
+                        selectedId === addr.id ? "#E8F5E9" : "#fff",
                       cursor: "pointer",
-                      transition: "0.3s ease",
-                      "&:hover": {
-                        boxShadow: "0 8px 18px rgba(0,0,0,0.15)",
-                        transform: "translateY(-2px)",
-                      },
+                      "&:hover": { boxShadow: "0 4px 12px rgba(0,0,0,0.15)" },
                     }}
                     onClick={() => setSelectedId(addr.id)}
                   >
@@ -184,6 +181,11 @@ export default function CheckoutAddress() {
                           >
                             📞 {addr.phoneNumber}
                           </Typography>
+                          {addr.landmark && (
+                            <Typography variant="body2" color="text.secondary">
+                              📍 Landmark: {addr.landmark}
+                            </Typography>
+                          )}
                           {addr.isDefault && (
                             <span className="badge bg-success mt-2">Default</span>
                           )}
@@ -196,13 +198,13 @@ export default function CheckoutAddress() {
             )}
           </Paper>
 
-          {/* ADD NEW ADDRESS FORM */}
+          {/* ADD NEW ADDRESS */}
           <Paper
             sx={{
-              p: 3,
-              borderRadius: "20px",
-              boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
-              background: "#ffffff",
+              p: { xs: 2, md: 3 },
+              borderRadius: "16px",
+              boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+              background: "#fff",
             }}
           >
             <Typography
@@ -217,13 +219,11 @@ export default function CheckoutAddress() {
             <Divider className="mb-3" />
 
             <Form onSubmit={handleAddAddress}>
-              <Row>
-                <Col md={6}>
-                  <Form.Group className="mb-3">
+              <Row className="gy-3">
+                <Col xs={12} md={6}>
+                  <Form.Group>
                     <Form.Label>Street</Form.Label>
                     <Form.Control
-                      placeholder="Enter street address"
-                      className="custom-input"
                       value={newAddress.street}
                       onChange={(e) =>
                         setNewAddress({ ...newAddress, street: e.target.value })
@@ -232,12 +232,10 @@ export default function CheckoutAddress() {
                     />
                   </Form.Group>
                 </Col>
-                <Col md={6}>
-                  <Form.Group className="mb-3">
+                <Col xs={12} md={6}>
+                  <Form.Group>
                     <Form.Label>City</Form.Label>
                     <Form.Control
-                      placeholder="Enter city"
-                      className="custom-input"
                       value={newAddress.city}
                       onChange={(e) =>
                         setNewAddress({ ...newAddress, city: e.target.value })
@@ -246,15 +244,11 @@ export default function CheckoutAddress() {
                     />
                   </Form.Group>
                 </Col>
-              </Row>
 
-              <Row>
-                <Col md={4}>
-                  <Form.Group className="mb-3">
+                <Col xs={12} md={4}>
+                  <Form.Group>
                     <Form.Label>State</Form.Label>
                     <Form.Control
-                      placeholder="Enter state"
-                      className="custom-input"
                       value={newAddress.state}
                       onChange={(e) =>
                         setNewAddress({ ...newAddress, state: e.target.value })
@@ -263,12 +257,10 @@ export default function CheckoutAddress() {
                     />
                   </Form.Group>
                 </Col>
-                <Col md={4}>
-                  <Form.Group className="mb-3">
+                <Col xs={12} md={4}>
+                  <Form.Group>
                     <Form.Label>Postal Code</Form.Label>
                     <Form.Control
-                      placeholder="Enter postal code"
-                      className="custom-input"
                       value={newAddress.postalCode}
                       onChange={(e) =>
                         setNewAddress({
@@ -280,86 +272,120 @@ export default function CheckoutAddress() {
                     />
                   </Form.Group>
                 </Col>
-                <Col md={4}>
-                  <Form.Group className="mb-3">
+                <Col xs={12} md={4}>
+                  <Form.Group>
                     <Form.Label>Country</Form.Label>
                     <Form.Control
-                      placeholder="Enter country"
-                      className="custom-input"
                       value={newAddress.country}
                       onChange={(e) =>
-                        setNewAddress({ ...newAddress, country: e.target.value })
+                        setNewAddress({
+                          ...newAddress,
+                          country: e.target.value,
+                        })
                       }
                       required
                     />
                   </Form.Group>
                 </Col>
+
+                <Col xs={12}>
+                  <Form.Group>
+                    <Form.Label>Landmark</Form.Label>
+                    <Form.Control
+                      placeholder="Nearby landmark (optional)"
+                      value={newAddress.landmark}
+                      onChange={(e) =>
+                        setNewAddress({
+                          ...newAddress,
+                          landmark: e.target.value,
+                        })
+                      }
+                    />
+                  </Form.Group>
+                </Col>
+
+                <Col xs={12}>
+                  <Form.Group>
+                    <Form.Label>Phone Number</Form.Label>
+                    <Form.Control
+                      value={newAddress.phoneNumber}
+                      onChange={(e) =>
+                        setNewAddress({
+                          ...newAddress,
+                          phoneNumber: e.target.value,
+                        })
+                      }
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+
+                <Col xs={12} md={6}>
+                  <Form.Group>
+                    <Form.Label>Address Type</Form.Label>
+                    <Form.Select
+                      value={newAddress.addressType}
+                      onChange={(e) =>
+                        setNewAddress({
+                          ...newAddress,
+                          addressType: e.target.value,
+                        })
+                      }
+                    >
+                      <option value="HOME">Home</option>
+                      <option value="WORK">Work</option>
+                      <option value="OTHER">Other</option>
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+
+                <Col xs={12} md={6} className="d-flex align-items-center">
+                  <Form.Check
+                    type="checkbox"
+                    label="Set as default"
+                    checked={newAddress.isDefault}
+                    onChange={(e) =>
+                      setNewAddress({
+                        ...newAddress,
+                        isDefault: e.target.checked,
+                      })
+                    }
+                  />
+                </Col>
+
+                <Col xs={12}>
+                  <Tooltip title="Save address to your account">
+                    <Button
+                      type="submit"
+                      className="w-100 mt-2"
+                      style={{
+                        padding: "12px",
+                        fontWeight: "bold",
+                        borderRadius: "12px",
+                        backgroundColor: "#1976d2",
+                        border: "none",
+                        fontSize: "1rem",
+                      }}
+                    >
+                      + Add Address
+                    </Button>
+                  </Tooltip>
+                </Col>
               </Row>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Landmark</Form.Label>
-                <Form.Control
-                  placeholder="Nearby landmark (optional)"
-                  className="custom-input"
-                  value={newAddress.landmark}
-                  onChange={(e) =>
-                    setNewAddress({ ...newAddress, landmark: e.target.value })
-                  }
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Phone Number</Form.Label>
-                <Form.Control
-                  placeholder="Contact phone number"
-                  className="custom-input"
-                  value={newAddress.phoneNumber}
-                  onChange={(e) =>
-                    setNewAddress({ ...newAddress, phoneNumber: e.target.value })
-                  }
-                  required
-                />
-              </Form.Group>
-
-              <Form.Check
-                type="checkbox"
-                label="Set as default address"
-                checked={newAddress.isDefault}
-                onChange={(e) =>
-                  setNewAddress({ ...newAddress, isDefault: e.target.checked })
-                }
-              />
-
-              <Tooltip title="Save address to your account">
-                <Button
-                  type="submit"
-                  className="mt-3 w-100"
-                  style={{
-                    padding: "12px",
-                    fontWeight: "bold",
-                    borderRadius: "12px",
-                    backgroundColor: "#1976d2",
-                    border: "none",
-                    fontSize: "1rem",
-                  }}
-                >
-                  + Add Address
-                </Button>
-              </Tooltip>
             </Form>
           </Paper>
         </Col>
 
-        {/* RIGHT COLUMN */}
-        <Col md={4}>
+        {/* RIGHT SECTION */}
+        <Col xs={12} lg={4}>
           <Paper
             sx={{
-              p: 3,
-              borderRadius: "20px",
-              boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
-              background: "#fdfdfd",
+              p: { xs: 2, md: 3 },
+              borderRadius: "16px",
+              boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+              background: "#fff",
               position: "sticky",
-              top: "20px",
+              top: "90px",
             }}
           >
             <Typography
@@ -370,18 +396,22 @@ export default function CheckoutAddress() {
             >
               Delivery Summary
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Select a delivery address to continue to payment.
+            <Divider className="mb-2" />
+            <Typography variant="body1" sx={{ mb: 1 }}>
+              Total Items: {items.length}
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              Total Price: ₹{total.toFixed(2)}
             </Typography>
             <Button
               variant="success"
               size="lg"
-              className="mt-4 w-100"
+              className="w-100 mt-4"
               style={{
                 padding: "14px",
                 fontWeight: "600",
                 fontSize: "1rem",
-                borderRadius: "14px",
+                borderRadius: "12px",
               }}
               onClick={handleProceed}
             >
@@ -390,23 +420,6 @@ export default function CheckoutAddress() {
           </Paper>
         </Col>
       </Row>
-
-      {/* Custom Styles for Input Focus */}
-      <style jsx="true">{`
-        .custom-input {
-          border: 1px solid #ccc;
-          border-radius: 8px;
-          padding: 10px;
-          transition: all 0.3s ease;
-          box-shadow: none;
-        }
-
-        .custom-input:focus {
-          outline: none;
-          border-color: #1976d2;
-          box-shadow: 0 0 8px rgba(25, 118, 210, 0.6);
-        }
-      `}</style>
     </Container>
   );
 }
