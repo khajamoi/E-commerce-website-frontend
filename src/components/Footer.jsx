@@ -3,9 +3,9 @@ import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { Facebook, Instagram, Twitter, Linkedin, Phone, Mail, MapPin } from "lucide-react";
 import { TextField, Button, Typography } from "@mui/material";
+import logoImg from "../assets/HSKAMind.jpeg"; // ✅ Import the image
 
 export default function Footer() {
-  // Social media links
   const socialLinks = {
     facebook: "https://www.facebook.com/yourpage",
     instagram: "https://www.instagram.com/yourprofile",
@@ -13,8 +13,7 @@ export default function Footer() {
     linkedin: "https://www.linkedin.com/in/yourprofile",
   };
 
-  // Custom color for FruitStore in copyright
-  const fruitStoreColor = "#ff5722"; // orange/red color
+  const fruitStoreColor = "#ff5722";
 
   return (
     <footer className="bg-dark text-light mt-auto">
@@ -24,18 +23,18 @@ export default function Footer() {
           <Col md={3}>
             <div className="d-flex align-items-center mb-3">
               <img
-                src="/assets/logo.png"
-                alt="FruitStore"
+                src={logoImg} // ✅ Use imported image
+                alt="HSKAMinds"
                 className="rounded-circle border border-success me-2"
                 style={{ width: 48, height: 48 }}
               />
               <Typography variant="h6" className="fw-bold" sx={{ color: "#4caf50" }}>
-                FruitStore 🍎
+                HSKAMinds
               </Typography>
             </div>
             <Typography variant="body2" color="gray">
-              Delivering <span className="text-success fw-semibold">fresh fruits</span> to your
-              doorstep. Shop fresh, live healthy!
+              Delivering <span className="text-success fw-semibold">"Shop 'til you drop!"</span> to your
+              doorstep. Shop with us, save with us!!
             </Typography>
             <div className="d-flex gap-3 mt-3">
               <a
@@ -103,18 +102,18 @@ export default function Footer() {
             </Typography>
             <ul className="list-unstyled">
               <li className="mb-2 d-flex align-items-start gap-2">
-                <MapPin size={18} /> 123 Fresh Street, Hyderabad, India
+                <MapPin size={18} /> 123 HSKAMinds Street, Hyderabad, India
               </li>
               <li className="mb-2 d-flex align-items-center gap-2">
                 <Phone size={18} />
                 <a href="tel:+911234567890" className="text-light text-decoration-none">
-                  +91 12345 67890
+                  +91 9014461217
                 </a>
               </li>
               <li className="d-flex align-items-center gap-2">
                 <Mail size={18} />
                 <a href="mailto:support@fruitstore.com" className="text-light text-decoration-none">
-                  support@fruitstore.com
+                  support@hskamindstechnolody.com
                 </a>
               </li>
             </ul>
@@ -151,7 +150,7 @@ export default function Footer() {
         <Typography variant="body2" color="white">
           © {new Date().getFullYear()}{" "}
           <span className="fw-bold" style={{ color: fruitStoreColor }}>
-            FruitStore
+            HSKAMinds Technology
           </span>
           . All rights reserved.
         </Typography>
